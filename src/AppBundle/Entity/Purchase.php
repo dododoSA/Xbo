@@ -33,23 +33,117 @@ class Purchase {
      */
     private $purchasedAt;
 
-    public function getId() {
+    /**
+     * @ORM\ManyToOne(targetEntity="Household", inversedBy="purchases")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+
+    private $household;
+
+
+    /**
+     * Set price
+     *
+     * @param integer $price
+     *
+     * @return Purchase
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return integer
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getName() {
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Purchase
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setName(string $name) {
-        $this->name = $name;
+    /**
+     * Set purchasedAt
+     *
+     * @param \DateTime $purchasedAt
+     *
+     * @return Purchase
+     */
+    public function setPurchasedAt($purchasedAt)
+    {
+        $this->purchasedAt = $purchasedAt;
+
+        return $this;
     }
 
-    public function getPurchasedAt() {
+    /**
+     * Get purchasedAt
+     *
+     * @return \DateTime
+     */
+    public function getPurchasedAt()
+    {
         return $this->purchasedAt;
     }
 
-    public function setPurchasedAt(DateTime $purchasedAt) {
-        $this->purchasedAt = $purchasedAt;
+    /**
+     * Set household
+     *
+     * @param \AppBundle\Entity\Household $household
+     *
+     * @return Purchase
+     */
+    public function setHousehold(\AppBundle\Entity\Household $household = null)
+    {
+        $this->household = $household;
+
+        return $this;
+    }
+
+    /**
+     * Get household
+     *
+     * @return \AppBundle\Entity\Household
+     */
+    public function getHousehold()
+    {
+        return $this->household;
     }
 }
