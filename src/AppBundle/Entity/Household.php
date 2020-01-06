@@ -24,13 +24,19 @@ class Household {
     private $name;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $balance = 0;
+
+    /**
      * @ORM\OneToMany(targetEntity="Purchase", mappedBy="household")
      */
     private $purchases;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="household")
      */
+    private $users;
 
     public function __construct()
     {
@@ -105,5 +111,63 @@ class Household {
     public function getPurchases()
     {
         return $this->purchases;
+    }
+
+    /**
+     * Set balance
+     *
+     * @param integer $balance
+     *
+     * @return Household
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+
+        return $this;
+    }
+
+    /**
+     * Get balance
+     *
+     * @return integer
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Household
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

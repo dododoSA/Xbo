@@ -19,7 +19,7 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Household", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="", inversedBy="users")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $household;
@@ -28,29 +28,5 @@ class User extends BaseUser
     {
         parent::__construct();
         // your own logic
-    }
-
-    /**
-     * Set household
-     *
-     * @param  $household
-     *
-     * @return User
-     */
-    public function setHousehold($household = null)
-    {
-        $this->household = $household;
-
-        return $this;
-    }
-
-    /**
-     * Get household
-     *
-     * @return 
-     */
-    public function getHousehold()
-    {
-        return $this->household;
     }
 }
