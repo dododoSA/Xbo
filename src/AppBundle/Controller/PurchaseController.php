@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class PurchaseController extends FOSRestController {
     /**
      * とりあえず一個登録
-     * @Post(/api/household/{id}/purchase)
+     * @Post("/api/household/{id}/purchase")
      */
     public function createAction(Request $request, $id)
     {
