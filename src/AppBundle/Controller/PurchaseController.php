@@ -6,20 +6,22 @@ use AppBundle\Entity\Household;
 use AppBundle\Entity\Purchase;
 use AppBundle\Form\PurchaseType;
 use DateTime;
+use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route(defaults={"_format": "json"})
  */
-
 class PurchaseController extends FOSRestController {
     /**
      * とりあえず一個登録
@@ -31,9 +33,7 @@ class PurchaseController extends FOSRestController {
 
         $purchase = new Purchase();
 
-        $form = $this->createForm(PurchaseType::class, $purchase, [
-            'csrf_protection' => false,
-        ]);
+        $form = $this->createForm(PurchaseType::class, $purchase);
         $form->submit($data);
 
         if (!$form->isValid()) {
@@ -48,16 +48,107 @@ class PurchaseController extends FOSRestController {
         }
 
         $purchase->setPurchasedAt(new DateTime());
-        $household = $this->getDoctrine()->getRepository(Household::class)->find($id);
+        $household = $this->getDoctrine()->getRepository(Household::class)->find(1);
         if (!$household) {
             throw new AccessDeniedException();
         }
+
+        $purchase->setHousehold($household);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($purchase);
         $em->flush();
 
         $json = $this->serialize($purchase);
+
+        return new Response($json, 201);
+    }
+
+    /**
+     * @Get("/api/household/{household_id}/purchase")
+     */
+    public function listAction($household_id) 
+    {
+        $purchases = $this->getDoctrine()
+            ->getRepository(Household::class)
+            ->find(1)
+            ->getPurchases();
+
+        if (!$purchases) {
+            throw new NotFoundHttpException();
+        }
+        
+        $json = $this->serialize($purchases);
+
+        return new Response($json, 200);
+    }
+
+    /**
+     * @Get("/api/household/{household_id}/purchase/{id}")
+     */
+    public function readAction($household_id, $id)
+    {
+        $purchase = $this->getDoctrine()->getRepository(Purchase::class)->find($id);
+
+        if (!$purchase) {
+            throw new NotFoundHttpException();
+        }
+
+        $json = $this->serialize($purchase);
+
+        return new Response($json, 200);
+    }
+
+    /**
+     * @Put("/api/household/{household_id}/purchase/{id}")
+     */
+    public function updateAction(Request $request, $household_id, $id)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $purchase = $this->getDoctrine()->getRepository(Purchase::class)->find($id);
+
+        if (!$purchase) {
+            throw new NotFoundHttpException();
+        }
+
+        $form = $this->createForm(PurchaseType::class, $purchase);
+        $form->submit($data);
+
+        if (!$form->isValid()) {
+            $errors = $this->getErrorsFromForm($form);
+            $errData = [
+                'title' => 'validation error',
+                'errors' => $errors,
+            ];
+
+            return new JsonResponse($errData, 400);
+        }
+
+        $json = $this->serialize($purchase);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+        return new Response($json, 200);
+    }
+
+    /**
+     * @Delete("/api/household/{household_id}/purchase/{id}")
+     */
+    public function deleteAction($household_id, $id)
+    {
+        $purchase = $this->getDoctrine()->getRepository(Purchase::class)->find($id);
+
+        if (!$purchase) {
+            throw new NotFoundHttpException();
+        }
+
+        $json = $this->serialize($purchase);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($purchase);
+        $em->flush();
 
         return new Response($json, 200);
     }

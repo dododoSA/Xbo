@@ -35,9 +35,8 @@ class Purchase {
 
     /**
      * @ORM\ManyToOne(targetEntity="Household", inversedBy="purchases")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="household_id", referencedColumnName="id")
      */
-
     private $household;
 
 
