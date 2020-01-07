@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HouseholdController extends FOSRestController
 {
@@ -44,6 +45,77 @@ class HouseholdController extends FOSRestController
         $em->flush();
 
         $json = $this->serialize($household);
+
+        return new Response($json, 200);
+    }
+
+    /**
+     * @Get("/api/household/{id}")
+     */
+    public function readAction($id)
+    {
+        $household = $this->getDoctrine()->getRepository(Household::class)->find($id);
+
+        if (!$household) {
+            throw new NotFoundHttpException();
+        }
+
+        $json = $this->serialize($household);
+
+        return new Response($json, 200);
+    }
+
+    /**
+     * @Put("/api/household/{id}")
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $household = $this->getDoctrine()->getRepository(Household::class)->find($id);
+
+        if (!$household) {
+            throw new NotFoundHttpException();
+        }
+
+        $form = $this->createForm(HouseholdType::class, $household);    
+        $form->submit($data);
+        
+        if (!$form->isValid()) {
+            $errors = $this->getErrorsFromForm($form);
+
+            $data = [
+                'title' => 'validation error',
+                'errors' => $errors
+            ];
+
+            return new JsonResponse($data, 400);
+        }
+
+        $json = $this->serialize($household);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+        return new Response($json, 200);
+    }
+
+    /**
+     * @Delete("/api/household/{id}")
+     */
+    public function deleteAction($id)
+    {
+        $household = $this->getDoctrine()->getRepository(Household::class)->find($id);
+
+        if (!$household) {
+            throw new NotFoundHttpException();
+        }
+
+        $json = $this->serialize($household);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($household);
+        $em->flush();
 
         return new Response($json, 200);
     }
