@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Household;
 use AppBundle\Entity\Purchase;
 use AppBundle\Form\PurchaseType;
+use AppBundle\Service\CRUDManager;
 use DateTime;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -23,6 +24,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @Route(defaults={"_format": "json"})
  */
 class PurchaseController extends FOSRestController {
+    private $CRUDManager;
+
+    public function __construct(CRUDManager $CRUDManager)
+    {
+        $this->CRUDManager = $CRUDManager;
+    }
+
     /**
      * とりあえず一個登録
      * @Post("/api/household/{id}/purchase")
@@ -33,19 +41,7 @@ class PurchaseController extends FOSRestController {
 
         $purchase = new Purchase();
 
-        $form = $this->createForm(PurchaseType::class, $purchase);
-        $form->submit($data);
-
-        if (!$form->isValid()) {
-            $errors = $this->getErrorsFromForm($form);
-
-            $errData = [
-                'title' => 'validation error',
-                'errors' => $errors,
-            ];
-
-            return new JsonResponse($errData, 400);
-        }
+        $this->CRUDManager->formProceed($data, PurchaseType::class, $purchase);
 
         $purchase->setPurchasedAt(new DateTime());
         $household = $this->getDoctrine()->getRepository(Household::class)->find(1);
@@ -59,7 +55,7 @@ class PurchaseController extends FOSRestController {
         $em->persist($purchase);
         $em->flush();
 
-        $json = $this->serialize($purchase);
+        $json = $this->CRUDManager->serialize($purchase);
 
         return new Response($json, 201);
     }
@@ -78,7 +74,7 @@ class PurchaseController extends FOSRestController {
             throw new NotFoundHttpException();
         }
         
-        $json = $this->serialize($purchases);
+        $json = $this->CRUDManager->serialize($purchases);
 
         return new Response($json, 200);
     }
@@ -94,7 +90,7 @@ class PurchaseController extends FOSRestController {
             throw new NotFoundHttpException();
         }
 
-        $json = $this->serialize($purchase);
+        $json = $this->CRUDManager->serialize($purchase);
 
         return new Response($json, 200);
     }
@@ -112,20 +108,9 @@ class PurchaseController extends FOSRestController {
             throw new NotFoundHttpException();
         }
 
-        $form = $this->createForm(PurchaseType::class, $purchase);
-        $form->submit($data);
+        $this->CRUDManager->formProceed($data, PurchaseType::class, $purchase);
 
-        if (!$form->isValid()) {
-            $errors = $this->getErrorsFromForm($form);
-            $errData = [
-                'title' => 'validation error',
-                'errors' => $errors,
-            ];
-
-            return new JsonResponse($errData, 400);
-        }
-
-        $json = $this->serialize($purchase);
+        $json = $this->CRUDManager->serialize($purchase);
 
         $em = $this->getDoctrine()->getManager();
         $em->flush();
@@ -144,36 +129,12 @@ class PurchaseController extends FOSRestController {
             throw new NotFoundHttpException();
         }
 
-        $json = $this->serialize($purchase);
+        $json = $this->CRUDManager->serialize($purchase);
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($purchase);
         $em->flush();
 
         return new Response($json, 200);
-    }
-
-    private function getErrorsFromForm(FormInterface $form)
-    {
-        $errors = array();
-        foreach ($form->getErrors() as $error) {
-            $errors[] = $error->getMessage();
-        }
-
-        foreach ($form->all() as $childForm) {
-            if ($childForm instanceof FormInterface) {
-                if ($childErrors = $this->getErrorsFromForm($childForm)) {
-                    $errors[$childForm->getName()] = $childErrors;
-                }
-            }
-        }
-
-        return $errors;
-    }
-
-    private function serialize($data)
-    {
-        return $this->container->get('jms_serializer')
-            ->serialize($data, 'json');
     }
 }

@@ -59,7 +59,7 @@ class HouseholdController extends FOSRestController
             throw new NotFoundHttpException();
         }
 
-        $json = $this->serialize($household);
+        $json = $this->CRUDManager->serialize($household);
 
         return new Response($json, 200);
     }
@@ -77,21 +77,9 @@ class HouseholdController extends FOSRestController
             throw new NotFoundHttpException();
         }
 
-        $form = $this->createForm(HouseholdType::class, $household);    
-        $form->submit($data);
-        
-        if (!$form->isValid()) {
-            $errors = $this->getErrorsFromForm($form);
+        $this->CRUDManager->formProceed($data, HouseholdType::class, $household);
 
-            $data = [
-                'title' => 'validation error',
-                'errors' => $errors
-            ];
-
-            return new JsonResponse($data, 400);
-        }
-
-        $json = $this->serialize($household);
+        $json = $this->CRUDManager->serialize($household);
 
         $em = $this->getDoctrine()->getManager();
         $em->flush();
@@ -110,36 +98,12 @@ class HouseholdController extends FOSRestController
             throw new NotFoundHttpException();
         }
 
-        $json = $this->serialize($household);
+        $json = $this->CRUDManager->serialize($household);
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($household);
         $em->flush();
 
         return new Response($json, 200);
-    }
-
-    private function getErrorsFromForm(FormInterface $form)
-    {
-        $errors = array();
-        foreach ($form->getErrors() as $error) {
-            $errors[] = $error->getMessage();
-        }
-
-        foreach ($form->all() as $childForm) {
-            if ($childForm instanceof FormInterface) {
-                if ($childErrors = $this->getErrorsFromForm($childForm)) {
-                    $errors[$childForm->getName()] = $childErrors;
-                }
-            }
-        }
-
-        return $errors;
-    }
-
-    private function serialize($data)
-    {
-        return $this->container->get('jms_serializer')
-            ->serialize($data, 'json');
     }
 }
