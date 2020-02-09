@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Household;
 use AppBundle\Form\HouseholdType;
+use AppBundle\Service\CRUDManager;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -17,6 +18,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HouseholdController extends FOSRestController
 {
+    private $CRUDManager;
+
+    public function __construct(CRUDManager $CRUDManager)
+    {
+        $this->CRUDManager = $CRUDManager;
+    }
+
     /**
      * @Post("/api/household")
      */
@@ -26,28 +34,16 @@ class HouseholdController extends FOSRestController
 
         $household = new Household();
 
-        $form = $this->createForm(HouseholdType::class, $household, [
+        $this->CRUDManager->formProceed($data, HouseholdType::class, $household, [
             'csrf_protection' => false,
         ]);
-        $form->submit($data);
-
-        if (!$form->isValid()) {
-            $errors = $this->getErrorsFromForm($form);
-
-            $errData = [
-                'title' => 'validation error',
-                'errors' => $errors,
-            ];
-
-            return new JsonResponse($errData, 400);
-        }
 
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($household);
         $em->flush();
 
-        $json = $this->serialize($household);
+        $json = $this->CRUDManager->serialize($household);
 
         return new Response($json, 200);
     }
