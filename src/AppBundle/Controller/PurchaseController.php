@@ -13,8 +13,6 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,8 +22,15 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @Route(defaults={"_format": "json"})
  */
 class PurchaseController extends FOSRestController {
+    /**
+     * @var CRUDManager
+     */
     private $CRUDManager;
 
+    /**
+     * PurchaseController constructor
+     * @param CRUDManager $CRUDManager
+     */
     public function __construct(CRUDManager $CRUDManager)
     {
         $this->CRUDManager = $CRUDManager;
@@ -34,8 +39,13 @@ class PurchaseController extends FOSRestController {
     /**
      * とりあえず一個登録
      * @Post("/api/household/{id}/purchase")
+     * 
+     * @param Request   $request
+     * @param int       $id
+     * @return Response
+     * @throws AccessDeniedException
      */
-    public function createAction(Request $request, $id)
+    public function createAction(Request $request, int $id): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -62,8 +72,12 @@ class PurchaseController extends FOSRestController {
 
     /**
      * @Get("/api/household/{household_id}/purchase")
+     * @param int $household_id
+     * 
+     * @return Response
+     * @throws Exception
      */
-    public function listAction($household_id) 
+    public function listAction(int $household_id): Response
     {
         $purchases = $this->getDoctrine()
             ->getRepository(Household::class)
@@ -81,8 +95,12 @@ class PurchaseController extends FOSRestController {
 
     /**
      * @Get("/api/household/{household_id}/purchase/{id}")
+     * @param int $household_id
+     * @param int $id
+     * @return Response
+     * @throws Exception
      */
-    public function readAction($household_id, $id)
+    public function readAction(int $household_id, int $id): Response
     {
         $purchase = $this->getDoctrine()->getRepository(Purchase::class)->find($id);
 
@@ -97,8 +115,13 @@ class PurchaseController extends FOSRestController {
 
     /**
      * @Put("/api/household/{household_id}/purchase/{id}")
+     * @param Request $request
+     * @param int $household_id
+     * @param int $id
+     * @return Response
+     * @throws Exception
      */
-    public function updateAction(Request $request, $household_id, $id)
+    public function updateAction(Request $request, int $household_id, int $id): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -120,8 +143,12 @@ class PurchaseController extends FOSRestController {
 
     /**
      * @Delete("/api/household/{household_id}/purchase/{id}")
+     * @param int $household_id
+     * @param int $id
+     * @return Response
+     * @throws Exception
      */
-    public function deleteAction($household_id, $id)
+    public function deleteAction(int $household_id, int $id)
     {
         $purchase = $this->getDoctrine()->getRepository(Purchase::class)->find($id);
 

@@ -18,10 +18,15 @@ class UserController extends FOSRestController
      */
     private $userManager;
 
+    /**
+     * @var CRUDManager
+     */
     private $CRUDManager;
 
     /**
      * UserController Constructor
+     * @param UserManagerInterface  $userManager
+     * @param CRUDManager           $CRUDManager
      */
     public function __construct(UserManagerInterface $userManager, CRUDManager $CRUDManager)
     {
@@ -31,6 +36,7 @@ class UserController extends FOSRestController
 
     /**
      * @Post("/api/register")
+     * @param Request $request
      */
     public function registerAction(Request $request)
     {

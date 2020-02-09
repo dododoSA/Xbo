@@ -10,16 +10,21 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HouseholdController extends FOSRestController
 {
+    /**
+     * @param CRUDManager
+     */
     private $CRUDManager;
 
+    /**
+     * HouseholdController constructor
+     * @param CRUDManager $CRUDManager
+     */
     public function __construct(CRUDManager $CRUDManager)
     {
         $this->CRUDManager = $CRUDManager;
@@ -27,8 +32,9 @@ class HouseholdController extends FOSRestController
 
     /**
      * @Post("/api/household")
+     * @param Request $request
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -50,8 +56,11 @@ class HouseholdController extends FOSRestController
 
     /**
      * @Get("/api/household/{id}")
+     * @param int $id
+     * @return Response
+     * @throws Exception
      */
-    public function readAction($id)
+    public function readAction(int $id): Response
     {
         $household = $this->getDoctrine()->getRepository(Household::class)->find($id);
 
@@ -66,8 +75,10 @@ class HouseholdController extends FOSRestController
 
     /**
      * @Put("/api/household/{id}")
+     * @param Request  $request
+     * @param int      $id 
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, int $id): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -89,8 +100,12 @@ class HouseholdController extends FOSRestController
 
     /**
      * @Delete("/api/household/{id}")
+     * @param int $id
+     * 
+     * @return Response
+     * @throws Exception
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id): Response
     {
         $household = $this->getDoctrine()->getRepository(Household::class)->find($id);
 
