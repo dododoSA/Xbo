@@ -1,3 +1,12 @@
-require('../css/app.css');
+import Vue from 'vue';
+import Routes from './routes.js';
 
-console.log('Hello Webpack Encore');
+import App from './views/App';
+
+const app = new Vue({
+    el: '#app',
+    router: Routes,
+    render: h => h(App),
+});
+
+export default app;

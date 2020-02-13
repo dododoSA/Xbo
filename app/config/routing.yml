@@ -8,6 +8,6 @@ admin_area:
 
 index:
     path: /{wildcard}
-    controller: AppBundle\DefaultController::indexAction
+    controller: AppBundle\Controller\DefaultController::indexAction
     requirements:
         wildcard: .*
