@@ -9,6 +9,10 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
     .enableVueLoader()
+    .enableSassLoader(options => {
+        options.implementation = require('sass');
+        options.fiber = require('fibers');
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();
