@@ -15,5 +15,6 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+/web/build/
 .env
 /node_modules/
