@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import "vuetify/dist/vuetify.min"
+import 'vuetify/dist/vuetify.min.css';
 
 import Routes from './routes.js';
 

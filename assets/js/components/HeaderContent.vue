@@ -1,16 +1,19 @@
 <template>
     <div>
-        ヘッダー
-        <v-navigation-drawer
+        <v-app-bar
             dark
-            permanent
+            shrink-on-scroll
+            prominent
         >
-            <v-list>
-                <v-list-item>
-                    Home
-                </v-list-item>
-            </v-list>
-        </v-navigation-drawer>
+            <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+            <v-toolbar-title>ナビゲーションバー</v-toolbar-title>
+
+            <v-spacer></v-spacer>
+
+
+        </v-app-bar>
+        
     </div>
 </template>
 
