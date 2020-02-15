@@ -13,6 +13,8 @@ use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class UserController extends FOSRestController
 {
@@ -26,15 +28,18 @@ class UserController extends FOSRestController
      */
     private $CRUDManager;
 
+    private $tokenStorage;
+
     /**
      * UserController Constructor
      * @param UserManagerInterface  $userManager
      * @param CRUDManager           $CRUDManager
      */
-    public function __construct(UserManagerInterface $userManager, CRUDManager $CRUDManager)
+    public function __construct(UserManagerInterface $userManager, CRUDManager $CRUDManager, TokenStorageInterface $tokenStorage)
     {
         $this->userManager = $userManager;
         $this->CRUDManager = $CRUDManager;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -60,11 +65,15 @@ class UserController extends FOSRestController
         $em->persist($household);
 
         $user->setHousehold($household);
-        $json = $this->CRUDManager->serialize($user);
         $this->userManager->updateUser($user);
 
+        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        $this->tokenStorage->setToken($token);
 
-        return new Response($json, 200);
+        $this->get('session')->set('_security_main', serialize($token));
+
+
+        return new Response($user->getUsername(), 200);
     }
 
     /**

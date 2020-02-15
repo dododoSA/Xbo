@@ -33,7 +33,7 @@ class SecurityController extends FOSRestController
         $this->tokenStorage = $tokenStorage;
     }
     /**
-     * @Post("/login", name="login")
+     * @Post("/api/login", name="login")
      */
     public function loginAction(Request $request)
     {
