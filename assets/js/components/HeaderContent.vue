@@ -7,13 +7,13 @@
         >
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-            <v-toolbar-title>ナビゲーションバー</v-toolbar-title>
+            <v-toolbar-title><router-link to="/">ナビゲーションバー</router-link></v-toolbar-title>
 
             <v-spacer></v-spacer>
 
-
-        </v-app-bar>
-        
+            <router-link class="mx-2" to="/signup">新規登録</router-link>
+            <router-link to="/login">ログイン</router-link>
+        </v-app-bar> 
     </div>
 </template>
 

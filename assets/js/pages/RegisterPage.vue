@@ -45,10 +45,11 @@ export default {
                     second: this.plainPasswordConf
                 }
             }
-            
+            const _this = this;
 
             axios.post('/api/register', postData)
                 .then(res => {
+                    _this.router.push('/household');
                     console.log(res);
                 })
                 .catch(err => {
