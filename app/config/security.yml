@@ -17,8 +17,11 @@ security:
             form_login:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
-
-            logout:       true
+            json_login:
+                check_path: /login
+            logout:
+                path: /logout
+                target: /
             anonymous:    true
 
     access_control:
