@@ -11,8 +11,10 @@
 
             <v-spacer></v-spacer>
 
+            <router-link class="mx-2" to="/household">マイページ</router-link>
             <router-link class="mx-2" to="/signup">新規登録</router-link>
-            <router-link to="/login">ログイン</router-link>
+            <router-link class="mx-2" to="/login">ログイン</router-link>
+            <a class="mx-2" href="/logout">ログアウト</a>
         </v-app-bar> 
     </div>
 </template>
