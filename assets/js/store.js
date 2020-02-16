@@ -1,19 +1,31 @@
-import vue from 'vue';
-import Vuex from 'Vuex';
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
+export default new Vuex.Store({
     state: {
-        user: ''
+        username: ''
     },
     getters: {
 
     },
     mutations: {
-
+        setUsername (state, username) {
+            state.username = username;
+        }
     },
     actions: {
-
+        getMe({commit}) {
+            axios.get('/api/login_check')
+                .then(res => {
+                    commit('setUsername', res.data)
+                })
+                .catch(err => {
+                    console.log(err);
+                    commit('setUsername', '');
+                });
+        }
     }
 })

@@ -73,7 +73,7 @@ class UserController extends FOSRestController
         $this->get('session')->set('_security_main', serialize($token));
 
 
-        return new Response($user->getUsername(), 200);
+        return new Response($user->getUsername(), 201);
     }
 
     /**

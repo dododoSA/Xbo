@@ -11,10 +11,14 @@
 
             <v-spacer></v-spacer>
 
-            <router-link class="mx-2" to="/household">マイページ</router-link>
-            <router-link class="mx-2" to="/signup">新規登録</router-link>
-            <router-link class="mx-2" to="/login">ログイン</router-link>
-            <a class="mx-2" href="/logout">ログアウト</a>
+            <div v-if="isLoggedIn">
+                <router-link class="mx-2" to="/household">マイページ</router-link>
+                <a class="mx-2" href="/logout">ログアウト</a>
+            </div>
+            <div v-else>
+                <router-link class="mx-2" to="/register">新規登録</router-link>
+                <router-link class="mx-2" to="/login">ログイン</router-link>
+            </div>
         </v-app-bar> 
     </div>
 </template>
@@ -22,6 +26,11 @@
 <script>
 export default {
     name: "HeaderContent",
+    computed: {
+        isLoggedIn: function() {
+            return this.$store.state.username !== '';
+        }
+    }
 }
 </script>
 

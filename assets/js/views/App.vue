@@ -16,6 +16,9 @@ export default {
     name: "App",
     components: {
         'header-content': HeaderContent
+    },
+    created: function() {
+        this.$store.dispatch('getMe');
     }
 }
 </script>

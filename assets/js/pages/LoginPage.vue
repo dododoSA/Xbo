@@ -41,6 +41,7 @@ export default {
 
             axios.post('/api/login', postData)
                 .then(res => {
+                    _this.$store.state.username = res.data;
                     _this.$router.push('/household');
                     console.log(res);
                 })

@@ -49,7 +49,8 @@ export default {
 
             axios.post('/api/register', postData)
                 .then(res => {
-                    _this.router.push('/household');
+                    _this.$store.state.username = res.data;
+                    _this.$router.push('/household');
                     console.log(res);
                 })
                 .catch(err => {
