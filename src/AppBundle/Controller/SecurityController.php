@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -66,5 +67,19 @@ class SecurityController extends FOSRestController
         $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 
         return new Response($user->getUsername());
+    }
+
+    /**
+     * @Get("/api/login_check")
+     */
+    public function checkLoggedInAction()
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw new UnauthorizedHttpException('ログインが完了していません');
+        }
+
+        return  new Response($user->getUsername());
     }
 }
