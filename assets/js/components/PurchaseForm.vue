@@ -11,7 +11,7 @@
                     <v-text-field type="number" label="個数" v-model="purchaseNumber" />
                     <div class="display-1">合計: ¥{{ totalPrice }}</div>
                     <v-card-actions>
-                        <v-btn>追加</v-btn>
+                        <v-btn @click="createPurchase">追加</v-btn>
                     </v-card-actions>
                 </v-form>
             </v-card-text>
@@ -42,13 +42,13 @@ export default {
             const _this = this;
 
             const reqData = {
-                name: purchaseName,
-                price: unitPrice
+                name: this.purchaseName,
+                price: this.unitPrice
             };
 
             
 
-            axios.post('/household/1/purchase', reqData)
+            axios.post('/api/household/1/purchase', reqData)
                 .then(res => {
                     console.log(res);
                 })

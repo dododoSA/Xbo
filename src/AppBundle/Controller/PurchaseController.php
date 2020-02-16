@@ -67,7 +67,7 @@ class PurchaseController extends FOSRestController {
 
         $json = $this->CRUDManager->serialize($purchase);
 
-        return new Response($json, 201);
+        return new Response($this->getUser()->getUsername(), 201);
     }
 
     /**
