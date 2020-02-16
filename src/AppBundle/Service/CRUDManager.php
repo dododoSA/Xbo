@@ -92,6 +92,11 @@ class CRUDManager {
             ->serialize($data, 'json');
     }
 
+    public function toArray($data): array
+    {
+        return $this->serializer->toArray($data);
+    }
+
     /**
      * @param string    $type
      * @param mixed     $data

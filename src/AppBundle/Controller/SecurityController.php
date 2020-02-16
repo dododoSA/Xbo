@@ -66,7 +66,14 @@ class SecurityController extends FOSRestController
         $event = new InteractiveLoginEvent($request, $token);
         $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 
-        return new Response($user->getUsername());
+        $resData = [
+            'username' => $user->getUsername(),
+            'household_id' => $user->getHousehold()->getId()
+        ];
+
+        $json = $this->serializer->serialize($resData, 'json');
+
+        return new Response($json);
     }
 
     /**
@@ -80,6 +87,14 @@ class SecurityController extends FOSRestController
             throw new UnauthorizedHttpException('ログインが完了していません');
         }
 
-        return  new Response($user->getUsername());
+        
+        $resData = [
+            'username' => $user->getUsername(),
+            'household_id' => $user->getHousehold()->getId()
+        ];
+
+        $json = $this->serializer->serialize($resData, 'json');
+
+        return new Response($json);
     }
 }

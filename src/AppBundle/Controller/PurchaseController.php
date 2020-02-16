@@ -54,7 +54,7 @@ class PurchaseController extends FOSRestController {
         $this->CRUDManager->formProceed($data, PurchaseType::class, $purchase);
 
         $purchase->setPurchasedAt(new DateTime());
-        $household = $this->getDoctrine()->getRepository(Household::class)->find(1);
+        $household = $this->getDoctrine()->getRepository(Household::class)->find($id);
         if (!$household) {
             throw new AccessDeniedException();
         }
@@ -67,7 +67,7 @@ class PurchaseController extends FOSRestController {
 
         $json = $this->CRUDManager->serialize($purchase);
 
-        return new Response($this->getUser()->getUsername(), 201);
+        return new Response($json, 201);
     }
 
     /**
@@ -81,14 +81,20 @@ class PurchaseController extends FOSRestController {
     {
         $purchases = $this->getDoctrine()
             ->getRepository(Household::class)
-            ->find(1)
+            ->find($household_id)
             ->getPurchases();
 
         if (!$purchases) {
             throw new NotFoundHttpException();
         }
         
-        $json = $this->CRUDManager->serialize($purchases);
+        $pArray = [];
+        
+        foreach ($purchases as $purchase) {
+            $pArray[] = $this->CRUDManager->toArray($purchase);
+        }
+
+        $json = json_encode($pArray);
 
         return new Response($json, 200);
     }

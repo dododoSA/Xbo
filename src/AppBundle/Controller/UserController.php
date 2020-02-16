@@ -72,8 +72,14 @@ class UserController extends FOSRestController
 
         $this->get('session')->set('_security_main', serialize($token));
 
+        $resData = [
+            'username' => $user->getUsername(),
+            'household_id' => $user->getHousehold()->getId()
+        ];
 
-        return new Response($user->getUsername(), 201);
+        $json = $this->CRUDManager->serialize($resData);
+
+        return new Response($json, 201);
     }
 
     /**

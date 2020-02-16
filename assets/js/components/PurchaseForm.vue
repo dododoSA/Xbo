@@ -29,7 +29,6 @@ export default {
             purchaseName: '',
             unitPrice: 0,
             purchaseNumber: 1
-
         }
     },
     computed: {
@@ -48,7 +47,7 @@ export default {
 
             
 
-            axios.post('/api/household/1/purchase', reqData)
+            axios.post('/api/household/' + _this.$store.state.householdId + '/purchase', reqData)
                 .then(res => {
                     console.log(res);
                 })

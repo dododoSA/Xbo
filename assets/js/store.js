@@ -6,25 +6,32 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        username: ''
+        username: '',
+        householdId: -1
     },
     getters: {
 
     },
     mutations: {
-        setUsername (state, username) {
-            state.username = username;
-        }
+        setUserdata (state, userdata) {
+            if (userdata !== null) {
+                state.username = userdata['username'];
+                state.householdId = userdata['household_id'];
+            } else {
+                state.username = '';
+                state.householdId = -1;
+            }
+        },
     },
     actions: {
         getMe({commit}) {
             axios.get('/api/login_check')
                 .then(res => {
-                    commit('setUsername', res.data)
+                    commit('setUserdata', res.data)
                 })
                 .catch(err => {
                     console.log(err);
-                    commit('setUsername', '');
+                    commit('setUserdata', null);
                 });
         }
     }
