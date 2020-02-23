@@ -9,11 +9,27 @@
                     <v-text-field label="項目名" v-model="purchaseName" />
                     <v-text-field type="number" label="値段" v-model="unitPrice" />
                     <v-text-field type="number" label="個数" v-model="purchaseNumber" />
-                    <!-- <v-date-picker
-                        locale="en-in"
-                        v-model="purchaseDate"
-                        no-title
-                    ></v-date-picker> -->
+                    <v-menu
+                        ref="showPicker"
+                        :close-on-content-click="false"
+                        v-model="showPicker"
+                        transition="scale-transition"
+                        offset-y
+                    >
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
+                                label="購入日"
+                                prepend-icon="mdi-calendar-month"
+                                v-model="purchaseDate"
+                                v-on="on"
+                            ></v-text-field>
+                        </template>
+                        <v-date-picker
+                            v-model="purchaseDate"
+                            no-title
+                            @input="showPicker = false"
+                        ></v-date-picker>
+                    </v-menu>
                     <div class="display-1">合計: ¥{{ totalPrice }}</div>
                     <v-card-actions>
                         <v-btn @click="createPurchase">追加</v-btn>
@@ -32,12 +48,13 @@ export default {
     props: {
         date: String
     },
-    data: () => {
+    data() {
         return {
             purchaseName: '',
             unitPrice: 0,
             purchaseNumber: 1,
-            purchaseDate: ''
+            purchaseDate: this.date,
+            showPicker: false
         }
     },
     computed: {
@@ -57,8 +74,6 @@ export default {
                 price: this.unitPrice
             };
 
-            
-
             axios.post('/api/household/' + _this.$store.state.householdId + '/purchase', reqData)
                 .then(res => {
                     console.log(res);
@@ -66,6 +81,11 @@ export default {
                 .catch(err => {
                     console.log(err);
                 });
+        }
+    },
+    watch: {
+        date: function(newDate, oldDate) {
+            this.purchaseDate = newDate;
         }
     }
 };
