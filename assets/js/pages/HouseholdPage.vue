@@ -1,7 +1,6 @@
 <template>
     <div>
         <purchase-list></purchase-list>
-        <purchase-form></purchase-form>
         <account-calendar></account-calendar>
     </div>
 </template>

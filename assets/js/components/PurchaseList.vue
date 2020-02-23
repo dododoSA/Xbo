@@ -1,6 +1,9 @@
 <template>
     <div>
         <v-card>
+            <v-btn text icon color="green" @click="reload">
+                <v-icon>mdi-cached</v-icon>
+            </v-btn>
             <v-list-item  v-for="purchase in purchases" v-bind:key="purchase.id" >
                 <v-list-item-content>
                     {{ purchase.name }} : ¥{{ purchase.price }}
@@ -21,7 +24,20 @@ export default {
         }
     },
     methods: {
-
+        reload: function() {
+            const _this = this;
+            const householdId = this.$store.state.householdId;
+            axios.get('/api/household/' + householdId + '/purchase')
+                .then(res => {
+                        _this.purchases = res.data;
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        if (err.response.status === 401) {
+                            _this.$router.push('/login');
+                        }
+                    })
+        }
     },
     created: function() {
         const _this = this
