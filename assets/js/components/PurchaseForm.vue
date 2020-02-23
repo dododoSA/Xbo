@@ -15,6 +15,9 @@
                         v-model="showPicker"
                         transition="scale-transition"
                         offset-y
+                        full-width
+                        max-width="290px"
+                        min-width="290px"
                     >
                         <template v-slot:activator="{ on }">
                             <v-text-field
