@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,7 +15,12 @@ class PurchaseType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('price', NumberType::class);
+            ->add('price', NumberType::class)
+            ->add('purchased_at', DateType::class,[
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd'
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

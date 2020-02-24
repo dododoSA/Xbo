@@ -74,7 +74,8 @@ export default {
 
             const reqData = {
                 name: this.purchaseName,
-                price: this.unitPrice
+                price: this.unitPrice,
+                purchased_at: String(this.purchaseDate)
             };
 
             axios.post('/api/household/' + _this.$store.state.householdId + '/purchase', reqData)

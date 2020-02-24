@@ -53,7 +53,6 @@ class PurchaseController extends FOSRestController {
 
         $this->CRUDManager->formProceed($data, PurchaseType::class, $purchase);
 
-        $purchase->setPurchasedAt(new DateTime());
         $household = $this->getDoctrine()->getRepository(Household::class)->find($id);
         if (!$household) {
             throw new AccessDeniedException();

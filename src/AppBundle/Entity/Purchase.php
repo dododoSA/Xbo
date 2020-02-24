@@ -29,7 +29,7 @@ class Purchase {
     private $price;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     private $purchasedAt;
 
