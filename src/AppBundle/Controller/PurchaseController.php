@@ -6,7 +6,6 @@ use AppBundle\Entity\Household;
 use AppBundle\Entity\Purchase;
 use AppBundle\Form\PurchaseType;
 use AppBundle\Service\CRUDManager;
-use DateTime;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -48,23 +47,32 @@ class PurchaseController extends FOSRestController {
     public function createAction(Request $request, int $id): Response
     {
         $data = json_decode($request->getContent(), true);
-
-        $purchase = new Purchase();
-
-        $this->CRUDManager->formProceed($data, PurchaseType::class, $purchase);
+        $purchases = $data['purchases'];
 
         $household = $this->getDoctrine()->getRepository(Household::class)->find($id);
         if (!$household) {
             throw new AccessDeniedException();
         }
+        
 
-        $purchase->setHousehold($household);
+        $pArray = [];
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($purchase);
+        foreach ($purchases as  $purchaseData) {
+            $purchase = new Purchase();
+
+            $this->CRUDManager->formProceed($purchaseData, PurchaseType::class, $purchase);
+            
+
+            $purchase->setHousehold($household);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($purchase);
+            $pArray[] = $this->CRUDManager->toArray($purchase);
+        }
+
         $em->flush();
 
-        $json = $this->CRUDManager->serialize($purchase);
+        
+        $json = json_encode($pArray);
 
         return new Response($json, 201);
     }

@@ -73,10 +73,18 @@ export default {
             const _this = this;
 
             const reqData = {
-                name: this.purchaseName,
-                price: this.unitPrice,
-                purchased_at: String(this.purchaseDate)
+                purchases: [
+                    {
+                        name: this.purchaseName,
+                        price: this.unitPrice,
+                        purchased_at: String(this.purchaseDate)
+                    }
+                ]
             };
+
+      
+
+            
 
             axios.post('/api/household/' + _this.$store.state.householdId + '/purchase', reqData)
                 .then(res => {
