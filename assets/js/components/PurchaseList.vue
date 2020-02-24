@@ -53,6 +53,13 @@ export default {
                     })
             }
         )
+        axios.get('/api/household/' + _this.$store.state.householdId + '/purchase')
+                    .then(res => {
+                        _this.purchases = res.data;
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
     }
 }
 </script>
