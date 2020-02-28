@@ -6,33 +6,12 @@
             </v-card-title>
             <v-card-text>
                 <v-form>
-                    <v-text-field label="項目名" v-model="purchaseName" />
-                    <v-text-field type="number" label="値段" v-model="unitPrice" />
-                    <v-text-field type="number" label="個数" v-model="purchaseNumber" />
-                    <v-menu
-                        ref="showPicker"
-                        :close-on-content-click="false"
-                        v-model="showPicker"
-                        transition="scale-transition"
-                        offset-y
-                        full-width
-                        max-width="290px"
-                        min-width="290px"
-                    >
-                        <template v-slot:activator="{ on }">
-                            <v-text-field
-                                label="購入日"
-                                prepend-icon="mdi-calendar-month"
-                                v-model="purchaseDate"
-                                v-on="on"
-                            ></v-text-field>
-                        </template>
-                        <v-date-picker
-                            v-model="purchaseDate"
-                            no-title
-                            @input="showPicker = false"
-                        ></v-date-picker>
-                    </v-menu>
+                    <div v-for="purchase in purchases" :key="purchase.id">
+                        <purchase-fields :date="date" :purchase="purchase" @name-change="value => onNameChange(value, purchaseWithUID.key)" ></purchase-fields>
+                    </div>
+                    <v-btn text icon @click="addField">
+                        <v-icon>mdi-plus-box-outline</v-icon>
+                    </v-btn>
                     <div class="display-1">合計: ¥{{ totalPrice }}</div>
                     <v-card-actions>
                         <v-btn @click="createPurchase">追加</v-btn>
@@ -45,19 +24,21 @@
 
 <script>
 import axios from 'axios';
+import PurchaseFields from './PurchaseFields';
 
 export default {
     name: 'PurchaseForm',
     props: {
-        date: String
+        date: String,
+        default: ''
     },
     data() {
         return {
-            purchaseName: '',
-            unitPrice: 0,
-            purchaseNumber: 1,
-            purchaseDate: this.date,
-            showPicker: false
+            purchases: [],
+            defaultDate: {
+                type: String,
+                default: ''
+            }
         }
     },
     computed: {
@@ -83,9 +64,6 @@ export default {
             };
 
       
-
-            
-
             axios.post('/api/household/' + _this.$store.state.householdId + '/purchase', reqData)
                 .then(res => {
                     console.log(res);
@@ -93,12 +71,38 @@ export default {
                 .catch(err => {
                     console.log(err);
                 });
+        },
+        addField: function() {
+            const uid = this.generateUID();
+            this.purchases.push({
+                id: uid,
+                name: '',
+                unitPrice: 0,
+                number: 0,
+                date: this.defaultDate
+            });
+        },
+        generateUID: function() {
+            let range = 1000;
+            return new Date().getTime().toString(16) + Math.floor(range * Math.random()).toString(16);
+        },
+        onNameChange: function(value, index) {
+            console.log(value);
+            console.log(index);
+            //this.purchases[index].name = value;
         }
     },
     watch: {
         date: function(newDate, oldDate) {
-            this.purchaseDate = newDate;
-        }
+            this.defaultDate = newDate;
+        },
+
+    },
+    components: {
+        'purchase-fields': PurchaseFields
+    },
+    created() {
+        this.addField();
     }
 };
 </script>
