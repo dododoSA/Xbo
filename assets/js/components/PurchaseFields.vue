@@ -72,18 +72,18 @@ export default {
             this.$emit('name-change', value);
         },
         onPriceChange: function(value) {
-            this.$emit('price-hange', value);
+            this.$emit('price-change', value);
         },
         onNumberChange: function(value) {
-            this.$emit('number-hange', value);
+            this.$emit('number-change', value);
         },
         onDateChange: function(value) {
-            this.$emit('date-hange', value);
+            this.$emit('date-change', value);
         }
     },
     watch: {
         date: function(newDate, oldDate) {
-//            this.dateValue = newDate;
+            this.dateValue = newDate;
         }
     },
 }
