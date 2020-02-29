@@ -6,7 +6,7 @@
                     <v-text-field label="項目名" :value="purchase.name" @change="value => onNameChange(value)" />
                 </v-col>
                 <v-col>
-                    <v-text-field type="number" label="値段" :value="purchase.price" @change="value => onPriceChange(value)" />
+                    <v-text-field type="number" label="値段" :value="purchase.unitPrice" @change="value => onPriceChange(value)" />
                 </v-col>
                 <v-col>
                     <v-text-field type="number" label="個数" :value="purchase.number" @change="value => onNumberChange(value)" />
@@ -55,7 +55,7 @@ export default {
             type: Object,
             default: () => ({
                 name: '',
-                price: 0,
+                unitPrice: 0,
                 number: 1,
                 date: ''
             })

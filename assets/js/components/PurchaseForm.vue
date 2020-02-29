@@ -22,7 +22,7 @@
                     <v-btn text icon @click="addField">
                         <v-icon>mdi-plus-circle-outline</v-icon>
                     </v-btn>
-                    <div class="display-1">合計: ¥{{ totalPrice }}</div>
+                    <div class="display-1">合計: {{ totalPrice }}¥</div>
                     <v-card-actions>
                         <v-btn @click="createPurchase">追加</v-btn>
                     </v-card-actions>
@@ -53,7 +53,12 @@ export default {
     },
     computed: {
         totalPrice: function() {
-            return this.unitPrice * this.purchaseNumber;
+            let total = 0;
+
+            this.purchases.forEach((purchase) => {
+                total += purchase.unitPrice * purchase.number;
+            });
+            return total;
         },
         dateVal: function() {
             return this.purchaseDate;
@@ -69,7 +74,7 @@ export default {
                         name: this.purchaseName,
                         price: this.unitPrice,
                         purchased_at: String(this.purchaseDate)
-                    }
+                    },
                 ]
             };
 
@@ -88,7 +93,7 @@ export default {
                 id: uid,
                 name: '',
                 unitPrice: 0,
-                number: 0,
+                number: 1,
                 date: this.defaultDate
             });
         },
