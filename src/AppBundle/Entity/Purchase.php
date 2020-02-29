@@ -29,6 +29,12 @@ class Purchase {
     private $price;
 
     /**
+     * 購入数   
+     * @ORM\Column(type="integer")
+     */
+    private $number;
+
+    /**
      * @ORM\Column(type="date")
      */
     private $purchasedAt;
@@ -144,5 +150,29 @@ class Purchase {
     public function getHousehold()
     {
         return $this->household;
+    }
+
+    /**
+     * Set number.
+     *
+     * @param int $number
+     *
+     * @return Purchase
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+
+        return $this;
+    }
+
+    /**
+     * Get number.
+     *
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
     }
 }
