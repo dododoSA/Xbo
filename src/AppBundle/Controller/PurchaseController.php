@@ -47,6 +47,7 @@ class PurchaseController extends FOSRestController {
     public function createAction(Request $request, int $id): Response
     {
         $data = json_decode($request->getContent(), true);
+        dump($data);
         $purchases = $data['purchases'];
 
         $household = $this->getDoctrine()->getRepository(Household::class)->find($id);

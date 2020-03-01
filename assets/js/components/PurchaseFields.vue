@@ -28,7 +28,7 @@
                                 prepend-icon="mdi-calendar-month"
                                 :value="dateValue"
                                 v-on="on"
-                                @change="value = onDateChange(value)"
+                                @change="value => onDateChange(value)"
                             ></v-text-field>
                         </template>
                         <v-date-picker
@@ -57,7 +57,7 @@ export default {
                 name: '',
                 unitPrice: 0,
                 number: 1,
-                date: ''
+                purchasedAt: ''
             })
         }
     },

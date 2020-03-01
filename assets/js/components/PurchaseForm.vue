@@ -45,10 +45,7 @@ export default {
     data() {
         return {
             purchases: [],
-            defaultDate: {
-                type: String,
-                default: ''
-            }
+            defaultDate: this.date
         }
     },
     computed: {
@@ -60,23 +57,14 @@ export default {
             });
             return total;
         },
-        dateVal: function() {
-            return this.purchaseDate;
-        }
     },
     methods: {
         createPurchase: function() {
             const _this = this;
 
-            const reqData = {
-                purchases: [
-                    {
-                        name: this.purchaseName,
-                        price: this.unitPrice,
-                        purchased_at: String(this.purchaseDate)
-                    },
-                ]
-            };
+            let reqData = {
+                purchases: this.computeReqestData()
+            }
 
       
             axios.post('/api/household/' + _this.$store.state.householdId + '/purchase', reqData)
@@ -94,8 +82,9 @@ export default {
                 name: '',
                 unitPrice: 0,
                 number: 1,
-                date: this.defaultDate
+                purchasedAt: this.defaultDate
             });
+            console.log(this.defaultDate)
         },
         removeField: function(id) {
             for (let i = 0; i < this.purchases.length; ++i) {
@@ -133,9 +122,18 @@ export default {
         onDateChange: function(value, id) {
             for(let i = 0; i < this.purchases.length; ++i) {
                 if (this.purchases[i].id === id) {
-                    this.purchases[i].date = value;
+                    this.purchases[i].purchasedAt = value;
                 }
             }
+        },
+        computeReqestData: function() {
+            return this.purchases.map(purchase => 
+                ({
+                    name: purchase.name,
+                    price: purchase.unitPrice,
+                    number: purchase.number,
+                    purchased_at: purchase.purchasedAt
+                }));
         }
     },
     watch: {
@@ -148,6 +146,7 @@ export default {
         'purchase-fields': PurchaseFields
     },
     created() {
+
         this.addField();
     }
 };
