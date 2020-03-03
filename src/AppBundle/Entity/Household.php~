@@ -26,7 +26,7 @@ class Household {
     /**
      * @ORM\Column(type="integer")
      */
-    private $balance;
+    private $balance = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="Purchase", mappedBy="household")
@@ -39,8 +39,9 @@ class Household {
     private $users;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="household")
      */
+    private $categories;
 
     public function __construct()
     {
@@ -115,5 +116,99 @@ class Household {
     public function getPurchases()
     {
         return $this->purchases;
+    }
+
+    /**
+     * Set balance
+     *
+     * @param integer $balance
+     *
+     * @return Household
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+
+        return $this;
+    }
+
+    /**
+     * Get balance
+     *
+     * @return integer
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Household
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * Add category.
+     *
+     * @param \AppBundle\Entity\Category $category
+     *
+     * @return Household
+     */
+    public function addCategory(\AppBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category.
+     *
+     * @param \AppBundle\Entity\Category $category
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeCategory(\AppBundle\Entity\Category $category)
+    {
+        return $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

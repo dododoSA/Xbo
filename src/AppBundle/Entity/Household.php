@@ -38,6 +38,11 @@ class Household {
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="household")
+     */
+    private $categories;
+
     public function __construct()
     {
         $this->purchases = new ArrayCollection();
@@ -169,5 +174,41 @@ class Household {
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add category.
+     *
+     * @param \AppBundle\Entity\Category $category
+     *
+     * @return Household
+     */
+    public function addCategory(\AppBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category.
+     *
+     * @param \AppBundle\Entity\Category $category
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeCategory(\AppBundle\Entity\Category $category)
+    {
+        return $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

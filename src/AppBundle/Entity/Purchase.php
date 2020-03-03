@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="purchase")
@@ -45,6 +46,11 @@ class Purchase {
      */
     private $household;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="purchases")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
 
     /**
      * Set price
@@ -174,5 +180,15 @@ class Purchase {
     public function getNumber()
     {
         return $this->number;
+    }
+
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category = null)
+    {
+        $this->category = $category;
     }
 }

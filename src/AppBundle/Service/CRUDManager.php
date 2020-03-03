@@ -39,7 +39,7 @@ class CRUDManager {
      * @return void
      * @throws BadRequestHttpException
      */
-    public function formProceed(array $reqData, string $formType, $object, array $options = []): void
+    public function formProceed(array $reqData, string $formType, $object, array $options = []): FormInterface
     {
 
         $form = $this->createForm($formType, $object, $options);
@@ -56,6 +56,7 @@ class CRUDManager {
 
             throw new BadRequestHttpException($data);
         }
+        return $form;
     }
 
     /**
