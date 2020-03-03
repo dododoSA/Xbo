@@ -17,7 +17,7 @@ class PurchaseType extends AbstractType
             ->add('name', TextType::class)
             ->add('price', NumberType::class)
             ->add('number', NumberType::class)
-            ->add('category', CategoryType::class)
+            ->add('category', TextType::class)
             ->add('purchased_at', DateType::class,[
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd'

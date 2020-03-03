@@ -29,11 +29,6 @@ class Category {
     private $household;
 
     /**
-     * @ORM\OneToMany(targetEntity="Purchase", mappedBy="category")
-     */
-    private $purchases;
-
-    /**
      * Get id.
      *
      * @return int
@@ -89,48 +84,5 @@ class Category {
     public function getHousehold()
     {
         return $this->household;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->purchases = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add purchase.
-     *
-     * @param \AppBundle\Entity\Purchase $purchase
-     *
-     * @return Category
-     */
-    public function addPurchase(\AppBundle\Entity\Purchase $purchase)
-    {
-        $this->purchases[] = $purchase;
-
-        return $this;
-    }
-
-    /**
-     * Remove purchase.
-     *
-     * @param \AppBundle\Entity\Purchase $purchase
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removePurchase(\AppBundle\Entity\Purchase $purchase)
-    {
-        return $this->purchases->removeElement($purchase);
-    }
-
-    /**
-     * Get purchases.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPurchases()
-    {
-        return $this->purchases;
     }
 }

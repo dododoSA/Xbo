@@ -47,8 +47,7 @@ class Purchase {
     private $household;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="purchases")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\Column(type="string", options={"default"=""})
      */
     private $category;
 
@@ -182,13 +181,28 @@ class Purchase {
         return $this->number;
     }
 
+
+    /**
+     * Set category.
+     *
+     * @param string $category
+     *
+     * @return Purchase
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category.
+     *
+     * @return string
+     */
     public function getCategory()
     {
         return $this->category;
-    }
-
-    public function setCategory(Category $category = null)
-    {
-        $this->category = $category;
     }
 }

@@ -63,8 +63,7 @@ class PurchaseController extends FOSRestController {
             $this->CRUDManager->formProceed($purchaseData, PurchaseType::class, $purchase);
 
             $purchase->setHousehold($household);
-
-            $category = $purchase->getCategory();
+            $purchase->getCategory()->setHousehold($household);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($purchase);
