@@ -47,7 +47,7 @@ class Purchase {
     private $household;
 
     /**
-     * @ORM\Column(type="string", options={"default"=""})
+     * @ORM\Column(type="string", nullable=true)
      */
     private $category;
 

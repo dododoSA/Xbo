@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-card>
-            <pie-chart v-if="loaded" :chartdata="chartData" :options="chartOptions"></pie-chart>
+        <v-card max-width="600px" class="mx-auto">
+            <pie-chart v-if="loaded" :chartdata="chartData.data" :options="chartOptions"></pie-chart>
             <v-btn text icon color="green" @click="reload">
                 <v-icon>mdi-cached</v-icon>
             </v-btn>
@@ -30,7 +30,7 @@ export default {
         return {
             purchases: {},
             loaded: false,
-            chartData: {},
+            chartData: [],
             chartOptions: {
                 title: {
                     display: true,
@@ -39,14 +39,15 @@ export default {
             }
         }
     },
-    
     methods: {
         reload: function() {
             const _this = this;
             const householdId = this.$store.state.householdId;
             axios.get('/api/household/' + householdId + '/purchase')
                 .then(res => {
+                        _this.$set(_this.chartData , "data", _this.makeChartData(res.data));
                         _this.purchases = res.data;
+                        _this.loaded = true;
                     })
                     .catch(err => {
                         console.log(err);
@@ -76,7 +77,7 @@ export default {
             householdId => {
                 axios.get('/api/household/' + householdId + '/purchase')
                     .then(res => {
-                        _this.chartData = _this.makeChartData(res.data);
+                        _this.$set(_this.chartData , "data", _this.makeChartData(res.data));
                         _this.purchases = res.data;
                         _this.loaded = true;
                     })
@@ -87,7 +88,7 @@ export default {
         )
         axios.get('/api/household/' + _this.$store.state.householdId + '/purchase')
                     .then(res => {
-                        _this.chartData = _this.makeChartData(res.data);
+                        _this.$set(_this.chartData , "data", _this.makeChartData(res.data));
                         _this.purchases = res.data;
                         _this.loaded = true;
                     })
