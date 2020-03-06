@@ -14,6 +14,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryController extends FOSRestController
@@ -33,7 +34,7 @@ class CategoryController extends FOSRestController
     }
 
     /**
-     * @Post("/api/household/{id}/category")
+     * @Post("/api/household/{household_id}/category")
      * @param Request $request
      */
     public function createAction(Request $request, int $household_id): Response
@@ -51,12 +52,12 @@ class CategoryController extends FOSRestController
             throw new NotFoundHttpException();
         }
 
-        //家計に存在しない名前は登録できないようにする。なんかオプションとかでこの辺は設定できそうなので後日余裕があったら調べる
+        //家計に存在する名前は登録できないようにする。なんかオプションとかでこの辺は設定できそうなので後日余裕があったら調べる
         if ($this->validateCategory($category->getName(), $household)) {
             $category->setHousehold($household);
         }
         else {
-            throw new BadRequestHttpException();
+            throw new ConflictHttpException();
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -145,9 +146,9 @@ class CategoryController extends FOSRestController
         $categories = $household->getCategories();
         foreach ($categories as $category) {
             if ($category->getName() === $categoryName) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
