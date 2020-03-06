@@ -14,11 +14,16 @@ import HeaderContent from '../components/HeaderContent'
 
 export default {
     name: "App",
+    data: () => {
+        return {
+            commonLoad: false
+        }
+    },
     components: {
         'header-content': HeaderContent
     },
-    created: function() {
-        this.$store.dispatch('getMe');
+    created: async function() {
+        await this.$store.dispatch('getMe');
     }
 }
 </script>

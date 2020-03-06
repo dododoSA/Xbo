@@ -24,6 +24,7 @@ export default new Vuex.Store({
         },
     },
     actions: {
+        //前ページ共通のロード
         getMe({commit}) {
             axios.get('/api/login_check')
                 .then(res => {

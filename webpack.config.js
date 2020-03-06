@@ -5,6 +5,7 @@ Encore
     .setOutputPath('web/build/')
     .setPublicPath('/build')
     .addEntry('app', './assets/js/app.js')
+    .addEntry('polyfill', 'babel-polyfill')
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
@@ -15,6 +16,7 @@ Encore
         options.implementation = require('sass');
         options.fiber = require('fibers');
     })
+
 ;
 
 module.exports = Encore.getWebpackConfig();
