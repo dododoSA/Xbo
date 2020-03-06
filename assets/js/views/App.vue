@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app v-if="commonLoad">
         <header-content></header-content>
         <v-content>
             <v-container fluid>
@@ -24,6 +24,7 @@ export default {
     },
     created: async function() {
         await this.$store.dispatch('getMe');
+        this.commonLoad = true;
     }
 }
 </script>

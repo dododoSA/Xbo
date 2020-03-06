@@ -60,9 +60,26 @@ export default {
                     })
         },
         makeChartData: function(purchases) {
-            const labels = purchases.map(purchase => purchase.name);
-            const colors = purchases.map((purchase) => "rgb(" + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ")")
-            const data = purchases.map(purchase => purchase.price);
+            //この辺は絶対リファクタリングしたい
+            const labels = ['なし'];
+            console.log(purchases);
+            purchases.forEach(purchase => {
+                if (!labels.includes(purchase.category) && purchase.category != null) {
+                    labels.push(purchase.category);
+                }
+            });
+            const colors = labels.map((label) => "rgb(" + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ")")
+            const data = labels.map(label => 0);
+            console.log(labels);
+            purchases.forEach(purchase => {
+                if (labels.includes(purchase.category)) {
+                    const index = labels.indexOf(purchase.category);
+                    data[index] += purchase.price;
+                }
+                else {
+                    data[0] += purchase.price;
+                }
+            })
 
             return {
                 labels: labels,

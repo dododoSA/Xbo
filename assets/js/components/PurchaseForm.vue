@@ -14,6 +14,7 @@
                             @price-change="value => onPriceChange(value, purchase.id)"
                             @number-change="value => onNumberChange(value, purchase.id)"
                             @date-change="value => onDateChange(value, purchase.id)"
+                            @category-change="value => onCategoryChange(value, purchase.id)"
                         ></purchase-fields>
                         <v-btn text icon @click="removeField(purchase.id, $event)">
                             <v-icon>mdi-minus-circle-outline</v-icon>
@@ -126,13 +127,21 @@ export default {
                 }
             }
         },
+        onCategoryChange: function(value, id) {
+            for(let i = 0; i < this.purchases.length; ++i) {
+                if (this.purchases[i].id === id) {
+                    this.purchases[i].category = value;
+                }
+            }
+        },
         computeReqestData: function() {
             return this.purchases.map(purchase => 
                 ({
                     name: purchase.name,
                     price: purchase.unitPrice,
                     number: purchase.number,
-                    purchased_at: purchase.purchasedAt
+                    purchased_at: purchase.purchasedAt,
+                    category: purchase.category
                 }));
         }
     },

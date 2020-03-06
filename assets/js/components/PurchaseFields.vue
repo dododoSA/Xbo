@@ -12,6 +12,9 @@
                     <v-text-field type="number" label="個数" :value="purchase.number" @change="value => onNumberChange(value)" />
                 </v-col>
                 <v-col>
+                    <v-select :items="categories" label="カテゴリ名" @change="value => onCategoryChange(value)"></v-select>
+                </v-col>
+                <v-col>
                     <v-menu
                         ref="showPicker"
                         :close-on-content-click="false"
@@ -44,6 +47,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: 'PurchaseFields',
     props: {
@@ -64,7 +69,8 @@ export default {
     data() {
         return {
             showPicker: false,
-            dateValue: this.date
+            dateValue: this.date,
+            categories: []
         }
     },
     methods: {
@@ -79,6 +85,9 @@ export default {
         },
         onDateChange: function(value) {
             this.$emit('date-change', value);
+        },
+        onCategoryChange: function(value) {
+            this.$emit('category-change', value);
         }
     },
     watch: {
@@ -86,6 +95,18 @@ export default {
             this.dateValue = newDate;
         }
     },
+    created:async function() {
+        const _this = this;
+        const householdId = this.$store.state.householdId;
+        await axios.get('/api/household/' + householdId + '/categories')
+            .then(res => {
+                _this.categories = res.data.map(category => category.name);
+                console.log(_this.categories);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
 }
 </script>
 

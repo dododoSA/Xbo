@@ -43,7 +43,8 @@ export default {
             const householdId = this.$store.state.householdId;
 
             const reqData = {
-                name: this.categoryName
+                name: this.categoryName,
+                color: "rgb(" + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ", " + (~~(256 * Math.random())) + ")"
             };
 
             axios.post('/api/household/' + householdId + '/category', reqData)
@@ -52,8 +53,9 @@ export default {
                 })
                 .catch(err => {
                     console.log(err);
-                });
-            }
+                })
+            ;
+        }
     }
 }
 </script>
