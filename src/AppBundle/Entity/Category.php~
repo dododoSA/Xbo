@@ -23,6 +23,11 @@ class Category {
     private $name;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $color;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Household", inversedBy="categories")
      * @ORM\JoinColumn(name="household_id", referencedColumnName="id")
      */
@@ -84,26 +89,5 @@ class Category {
     public function getHousehold()
     {
         return $this->household;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->purchases = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add purchase.
-     *
-     * @param \AppBundle\Entity\Purchase $purchase
-     *
-     * @return Category
-     */
-    public function addPurchase(\AppBundle\Entity\Purchase $purchase)
-    {
-        $this->purchases[] = $purchase;
-
-        return $this;
     }
 }

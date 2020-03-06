@@ -23,6 +23,11 @@ class Category {
     private $name;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $color;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Household", inversedBy="categories")
      * @ORM\JoinColumn(name="household_id", referencedColumnName="id")
      */
@@ -84,5 +89,29 @@ class Category {
     public function getHousehold()
     {
         return $this->household;
+    }
+
+    /**
+     * Set color.
+     *
+     * @param string $color
+     *
+     * @return Category
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color.
+     *
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
     }
 }
