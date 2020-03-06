@@ -15,6 +15,9 @@
                 <v-list-item-content>
                     購入日: {{ purchase.purchased_at }}
                 </v-list-item-content>
+                <v-list-item-content>
+                    <v-btn color="error" @click="deletePurchase(purchase)">削除</v-btn>
+                </v-list-item-content>
             </v-list-item>
         </v-card>
     </div>
@@ -68,10 +71,28 @@ export default {
                     data: data,
                 }]
             };
+        },
+        deletePurchase: function(purchase) {
+            const _this = this;
+            const householdId = this.$store.state.householdId;
+            if (householdId === -1) {
+                return;
+            }
+            axios.delete('/api/household/' + householdId + '/purchase/' + purchase.id)
+                .then(res => {
+                    //リロードし直すかどうか問題、とりあえず今は同じものをこちらで削除している
+                    const index = _this.purchases.findIndex(p => p.id === purchase.id);
+                    _this.purchases.splice(index, 1);
+                    _this.$set(_this.chartData , "data", _this.makeChartData(_this.purchases));
+                    console.log(res);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     },
     created: function() {
-        const _this = this
+        const _this = this;
         const unwatch = this.$store.watch(
             state => state.householdId,
             householdId => {
