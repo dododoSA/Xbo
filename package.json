@@ -3,7 +3,7 @@
     "@mdi/font": "^4.9.95",
     "@symfony/webpack-encore": "^0.28.2",
     "axios": "^0.19.2",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "css-loader": "^2.1.1",
     "fibers": "^4.0.2",
     "sass": "^1.25.0",
